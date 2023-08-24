@@ -10,7 +10,10 @@
 </head>
 
 <body>
-
+    <form action="">
+        <input type="number" class="month" placeholder="month">
+        <input type="number" class="score" placeholder="score">
+    </form>
 
     <script>
         //  Задача 4. Користувач задає місяць навчання учня
@@ -97,26 +100,43 @@
             }
         }
         window.onload = function () {
-            try {
-                let getCalculate = new Student('n', 10)
-                let can = getCalculate.getChangeScore()
-                if (can) {
-                    document.write('You can change')
-                } else {
-                    document.write('You dont need change')
+            let form = document.querySelector('form')
+            form.addEventListener('change', function (event) {
+                if (event.target.classList.contains('month') || event.target.classList.contains('score')) {
+                    let inputMonth = parseInt(document.querySelector('.month').value);
+                    let inputScore = parseInt(document.querySelector('.score').value);
+                    try {
+                        let getCalculate = new Student(inputMonth, inputScore)
+
+                        let can = getCalculate.getChangeScore()
+
+                        let resultElement = document.createElement('p');
+
+                        if (can) {
+                            resultElement.innerText = 'You can change'
+                        } else {
+                            resultElement.innerText = 'You dont need change'
+                        }
+                        document.body.appendChild(resultElement);
+
+                    } catch (error) {
+                        let errorElement = document.createElement('p');
+                        if (error instanceof IsNotNumber) {
+                            errorElement.textContent = error.message;
+                        }
+                        if (error instanceof NotInRange) {
+                            errorElement.textContent = error.message;
+                        }
+                        if (error instanceof IsNotStudyPeriod) {
+                            errorElement.textContent = error.message;
+                        }
+                        document.body.appendChild(errorElement);
+                    }
                 }
-            } catch (error) {
-                if (error instanceof IsNotNumber) {
-                    document.write(error.message);
-                }
-                if (error instanceof NotInRange) {
-                    document.write(error.message);
-                }
-                if (error instanceof IsNotStudyPeriod) {
-                    document.write(error.message);
-                }
-            }
+            })
         }
+
+
     </script>
 </body>
 
